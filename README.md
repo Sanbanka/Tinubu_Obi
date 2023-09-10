@@ -24,8 +24,9 @@ We identify the data being used, its limitations and its credibility.
 Information on the data being used:
 Data was obtained from Global Data Lab (GDL) which is an independent data and research center at the Nijmegen School of Management of Radboud University. The specific dataset used was from the Sub national Human Development Index (SHDI), which is an average of the sub-national values of three dimensions: education, health and standard of living..
 
+
+Limitations.
 ---
-Limitations
----
+
 The dataset presents specific gaps between(1999-2002). Those records will have to be extrapolated in order to fill in gap.
 The accuracies of the extrapolated datapoints average about 50%
