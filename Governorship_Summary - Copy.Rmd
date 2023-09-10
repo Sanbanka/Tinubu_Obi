@@ -1,0 +1,179 @@
+Introduction
+---
+```Every man has a right to his opinion, but no man has a right to be wrong in his facts.```
+Background - 
+The 2023 Nigerian presidential election was held on 25 February 2023, There were 93.4 million eligible voters for February 25 polls, the sixth since Nigeria’s return to democracy in 1999.
+
+Top contenders include Bola Tinubu, a two-term former governor of Lagos(29 May 1999 – 29 May 2007) and a major stalwart of the ruling All Progressives Congress (APC) party as well as the Peoples Democratic Party’s (PDP) Atiku Abubakar, a former vice president who is gunning for the position a record sixth time.
+
+Also in the race are the Labour Party’s (LP) Peter Obi, a two-time former governor of Anambra (14th June 2007 – 17th March 2014), and Rabiu Kwankwaso, ex-defence minister and former governor of the northern hub Kano, on the ticket of the New Nigeria People’s Party (NNPP).
+
+We have decided to do a comparative anlysis between two candidates - Bola Tinubu of APC and Peter Obi OF LP. Both candidates have been two time former governors, therefore this presents us with a good basis to perform the analysis.
+---
+Objectives
+---
+1. How well did Peter Obi and Bola Tinubu run their respective states.
+2. How prominent was their impact at the time to the current status of their state.
+---
+Project Task
+---
+Through the use of historical data, analyse the impact and effect of both candidates on their respective states when there were governors of their respective states.
+---
+Data Collection
+---
+We identify the data being used, its limitations and its credibility.
+---
+Information on the data being used:
+Data was obtained from Global Data Lab (GDL) which is an independent data and research center at the Nijmegen School of Management of Radboud University. The specific dataset used was from the Sub national Human Development Index (SHDI), which is an average of the sub-national values of three dimensions: education, health and standard of living..
+---
+Limitations
+The dataset presents specific gaps between(1999-2002). Those records will have to be extrapolated in order to fill in gap.
+The accuracies of the extrapolated datapoints average about 50%
+---
+Data analysis
+---
+Exploring the data
+---
+# install packages
+```{r}
+install.packages("tidyverse")
+install.packages("lubridate")
+install.packages("skimr")
+install.packages("janitor")
+install.packages("dplyr")
+install.packages("readr")
+```
+
+#load packages
+```{r}
+library(tidyverse)
+library(lubridate)
+library(skimr)
+library(janitor)
+library(dplyr)
+library(readr)
+```
+#import dataset
+```{r}
+Total_HDI<- read_csv("SHDI-SGDI-Total 6.0.csv")
+```
+#filtering dataset
+```{r}
+Nigeria <- Total_HDI %>% filter(country=='Nigeria',region=='lagos'&'Anambra')
+Anambra <- Nigeria %>% filter(region=='Anambra')
+Lagos <- Nigeria %>% filter(region=='Lagos')
+```
+---
+Transforming the dataset
+---
+#selecting data
+```{r}
+Anambra_trim <- Anambra %>% select(c(region,year,lifexp,healthindex,incindex,edindex,gnic))
+Lagos_trim <- Lagos %>% select(c(region,year,lifexp,healthindex,incindex,edindex,gnic))
+```
+#re-naming dataset
+```{r}
+Anambra_trim <- Anambra_trim %>% rename(life_exp = lifexp,health_index=healthindex,inc_index=incindex,edu_index = edindex,gross_nat_inc = gnic)
+Lagos_trim <- Lagos_trim %>% rename(life_exp = lifexp,health_index=healthindex,inc_index=incindex,edu_index = edindex,gross_nat_inc = gnic)
+```
+#combining datasets for anambra and lagos
+```{r}
+Anam_Lag <- bind_rows(Anambra_trim,Lagos_trim)
+
+write.csv(Anam_Lag,"C:\\Users\\Samuel Eyong\\Documents\\R\\Governorship\\Merged_all.csv" ,row.names=FALSE)
+```
+---
+Descriptive Analysis
+---
+```{r}
+Comp <- read_csv("Merged_all.csv")
+summary(Comp)
+```
+The dataset contains data-points that go from 2003 - 2021, with the following data indicators - life expectancy, health index, income index, educational index
+Linear regression done with excel was used to extrapolate the records that go back to 1999 in order to accommodate Tinubu's appointment period (1999-2007).
+---
+Visualization
+---
+#loading package
+```{r}
+installed.packages('ggplot2')
+library(ggplot2)
+```
+Life exp vs year
+```{r}
+ggplot(data=Comp) + geom_line(mapping=aes(x=year,y=life_exp))+facet_wrap(~region)+labs(y="Life expentancy", x="Year")
+```
+Currently both states have similar life expectancies (~61 years). 
+During tinubu's appointment (1999-2007).
+Lagos observed a 3% increase in expectancy during tinubu's term, which raised expectancy to 57.5 years. Lagos has constantly witnessed a steady increase in life expentancy during tinubu's tenure without reduction.  
+
+During Peter Obi's appointment (2007-2014).
+Anambra observed a 7% increase in expectancy during peter Obi's term , which raised expectancy to 57 years. More Significant improvements in anambra's life expentancy can be seen during Obi's tenure.
+
+Comparing - Anambra witnessed more changes in life expectancy than lagos state in the same period of time.
+
+Health_ind vs Year
+```{r}
+ggplot(data=Comp) + geom_line(mapping=aes(x=year,y=health_index))+facet_wrap(~region)+labs(y="health index", x="Year")
+```
+A health index(HI) provides a single value for health that can show how health changes over time.
+Currently both states have similar HI of ~0.62
+During Tinubu's appointment (1999-2007).
+Lagos observed an overall reduction of 3% in its HI. Lagos witnessed a small change in HI during tinubu's tenure. HI continued to remain steady until sometime in 2013 (0.56) where it increased to 0.62. These reduction could be attributed to a rapid increase in the population of Lagos, which might have resulted in the states inability to manage such as increase.
+
+During Peter Obi's appointment (2007-2014).
+Anambra observed an overall increase of 14% in its HI. Anambra witnessed a more significant increase during obi's tenure. HI has continued to be steadily increasing since the with no slowdowns.
+
+Comparing - Anambra witnessed more changes in life expectancy than lagos state in the same period of time. 
+
+Conclusion
+These results support the life expectancy increase witnessed by anambra & lagos. It would seems that Obi implemented and carried out more health initiatives during his tenure.
+
+inc_index vs year
+```{r}
+ggplot(data=Comp) + geom_line(mapping=aes(x=year,y=inc_index))+facet_wrap(~region)+labs(y="Income index", x="Year")
+```
+The income index is a measure that assesses the level of income or economic well-being within a country.
+
+Currently the income index for Lagos and Anambra are 0.65 and 0.64 respectively
+
+During Tinubu's appointment (1999-2007).
+Lagos observed an increase of 31% in its income index. During Tinubu's tenure, Lagos experienced a more significant increase in its overall gross national income. Lagos income index peaked at the end of Tinubu's tenure and was fairly stable until 2015 when it underwent a reduction.
+
+During Peter Obi's appointment (2007-2014).
+Anambra observed an increase of 9% in its income index. During Obi's tenure, Anambra also experienced a significant increase of Gross national income. Anambra income index peaked at the end of Obi's term before undergoing a reducing trend to where it is at currently.
+
+Comparing - Lagos made more strides in increasing the states overall gross national income compared to Anambra.
+
+Conclusion: Its seems that Lagos implemented and utilized very favorable initiatives during this time period that promoted/stimulated overall earning potential of the state
+
+edu_index vs year
+```{r}
+ggplot(data=Comp) + geom_line(mapping=aes(x=year,y=edu_index))+facet_wrap(~region)+labs(y="Educational index", x="Year")
+
+```
+The Education Index is measured by the adult literacy rate (with two-thirds weighting) and the combined primary, secondary, and tertiary gross enrollment ratio (with one-third weighting).
+
+Currently the Educational index for Lagos and Anambra are 0.75 and 0.7 respectively
+
+During Tinubu's appointment (1999-2007).
+Lagos experienced an overall reduction of its educational index of about 4%. Lagos experienced a moderate change in its educational index during tinubu's tenure. Overall the education index in lagos has undergone a few dips(2003, 2010) before trending up to 0.75 in 2021.
+
+During Peter Obi's appointment (2007-2014).
+Anambra experienced an overall increase of its educational index of about 15%. Anambra experienced a more significant change in its educational index during Obi's tenure. It witnessed a small decline from 2005 -2010, from 2010 further it started trending upwards till 0.7 currently.
+
+Comparing - Anambra witnessed a more significant change in its EI than Lagos state during a similar period of time.
+
+Conclusion: it seems that anambra promoted and emphasized more schemes in education such as increase in literacy percentage and overall participation in schooling at various levels.
+---
+Interpretation/Conclusion
+---
+
+#Key findings
+*During the tenure of Tinubu, Lagos state transformed into an economic powerhouse, witnessing a remarkable increase in its income index and solidifying its position as a thriving economic hub.
+
+*Anambra state underwent a significant transformation in terms of human development, particularly in the areas of education and health. The state witnessed a remarkable improvement, experiencing substantial advancements that positively impacted the educational landscape and healthcare services, leading to enhanced overall well-being and development.
+
+*###HDI Summary
+
+Both states under their respective governors experienced good growth. Both Obi and Tinubu performed well and administered their respective states in way that set a good foundation therefore allowing them to further thrive in the future.
