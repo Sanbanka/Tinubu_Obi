@@ -1,5 +1,6 @@
 # Tinubu_Obi
 ```Every man has a right to his opinion, but no man has a right to be wrong in his facts.```
+---
 Background - 
 The 2023 Nigerian presidential election was held on 25 February 2023, There were 93.4 million eligible voters for February 25 polls, the sixth since Nigeria’s return to democracy in 1999.
 
